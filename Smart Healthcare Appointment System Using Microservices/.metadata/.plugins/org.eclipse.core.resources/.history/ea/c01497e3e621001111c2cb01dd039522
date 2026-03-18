@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    config:
+      enabled: false   # ❌ disable config server (for now)
+
+    gateway:
+      routes:
+        - id: appointment-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/appointments,/appointments/**
+
+        - id: doctor-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/doctors,/doctors/**
+
+# ❌ Eureka disabled (for now)
+eureka:
+  client:
+    enabled: false
+
+# 🔥 Zipkin + Tracing
+management:
+  tracing:
+    sampling:
+      probability: 1.0   # capture all requests
+
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+spring:
+  zipkin:
+    base-url: http://localhost:9411

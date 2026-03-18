@@ -1,0 +1,5 @@
+package com.example.healthcare.event;
+
+public class AppointmentEvent {
+
+}

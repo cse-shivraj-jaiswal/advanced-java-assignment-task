@@ -1,0 +1,5 @@
+package com.example.healthcare.config;
+
+public class AppConfig {
+
+}

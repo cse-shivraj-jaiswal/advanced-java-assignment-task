@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    config:
+      enabled: false   # 🔥 MOST IMPORTANT LINE
+
+    gateway:
+      routes:
+        - id: appointment-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/appointments/**
+
+        - id: doctor-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/doctors/**
+
+eureka:
+  client:
+    enabled: false

@@ -1,0 +1,5 @@
+package com.example.healthcare.dto;
+
+public class DoctorDTO {
+
+}

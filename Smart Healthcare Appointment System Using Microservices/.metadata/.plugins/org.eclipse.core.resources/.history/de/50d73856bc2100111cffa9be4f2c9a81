@@ -1,0 +1,36 @@
+package com.example.healthcare.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.healthcare.entity.Appointment;
+import com.example.healthcare.client.DoctorClient;
+import com.example.healthcare.repository.AppointmentRepository;
+
+@Service
+public class AppointmentService {
+
+    @Autowired
+    private AppointmentRepository repository;
+
+    @Autowired
+    private DoctorClient doctorClient;
+
+    public Appointment createAppointment(Appointment appointment) {
+
+        // 🔥 Call Doctor Service
+        Object doctor = doctorClient.getDoctor(appointment.getDoctorId());
+
+        if (doctor == null) {
+            throw new RuntimeException("Doctor not found");
+        }
+
+        return repository.save(appointment);
+    }
+
+    public List<Appointment> getAllAppointments() {
+        return repository.findAll();
+    }
+}

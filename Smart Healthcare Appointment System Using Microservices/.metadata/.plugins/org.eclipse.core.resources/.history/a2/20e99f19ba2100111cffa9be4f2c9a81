@@ -1,0 +1,5 @@
+package com.example.healthcare.entity;
+
+public class Appointment {
+
+}

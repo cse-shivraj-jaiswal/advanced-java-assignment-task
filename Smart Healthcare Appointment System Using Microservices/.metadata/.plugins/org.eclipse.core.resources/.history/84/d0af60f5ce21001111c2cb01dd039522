@@ -1,0 +1,13 @@
+package com.example.healthcare.consumer;
+
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class NotificationConsumer {
+
+    @RabbitListener(queues = "appointment.queue")
+    public void receiveMessage(Object message) {
+        System.out.println("📩 Notification Received: " + message);
+    }
+}

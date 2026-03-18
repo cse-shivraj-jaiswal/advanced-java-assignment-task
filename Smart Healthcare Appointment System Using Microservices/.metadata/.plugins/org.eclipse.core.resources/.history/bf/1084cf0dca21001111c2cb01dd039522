@@ -1,0 +1,53 @@
+package com.example.healthcare.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.healthcare.entity.Appointment;
+import com.example.healthcare.exception.CustomException;
+import com.example.healthcare.client.DoctorClient;
+import com.example.healthcare.dto.DoctorDTO;
+import com.example.healthcare.repository.AppointmentRepository;
+
+
+@Service
+public class AppointmentService {
+
+    @Autowired
+    private AppointmentRepository repository;
+
+    @Autowired
+    private DoctorClient doctorClient;
+
+    // ✅ Create Appointment with Doctor Validation
+    public Appointment createAppointment(Appointment appointment) {
+
+        // 🔥 Call Doctor Service using Feign
+        DoctorDTO doctor = doctorClient.getDoctor(appointment.getDoctorId());
+
+        // ✅ Validation
+        if (doctor == null) {
+            throw new CustomException("Doctor not found");
+        }
+
+        if (!doctor.isAvailable()) {
+            throw new CustomException("Doctor is not available");
+        }
+
+        // ✅ Save appointment
+        return repository.save(appointment);
+    }
+
+    // ✅ Get All Appointments
+    public List<Appointment> getAllAppointments() {
+        return repository.findAll();
+    }
+
+    // ✅ Get Appointment by ID (extra useful for interview)
+    public Appointment getAppointment(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+    }
+}
